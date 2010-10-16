@@ -1,0 +1,56 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage{verbatim}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{indentfirst}
+\usepackage{alltt}
+\usepackage{syntonly}
+\usepackage{gglocal}
+
+% \syntaxonly
+
+\ifx\pdfouput\undefined
+\DeclareGraphicsRule{*}{eps}{*}{}
+\else
+\DeclareGraphicsRule{*}{mps}{*}{}
+\fi
+
+\setcounter{secnumdepth}{3}
+
+\title{\TeX Tutorial}
+\author{Guanjun Dong}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\begin{CJK}{UTF8}{song}
+
+\pagenumbering{roman}
+\maketitle
+
+\newpage
+\tableofcontents 
+
+\newpage
+\pagenumbering{arabic}
+\listoffigures 
+
+\newpage
+\listoftables
+
+\newpage\input{example.tex}
+\newpage\input{daodejing.tex}
+\newpage\input{erlang.tex}
+\newpage\input{calendar.tex}
+\newpage\input{yfs.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% END
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{CJK}
+\end{document}

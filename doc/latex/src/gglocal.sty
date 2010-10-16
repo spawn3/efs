@@ -1,0 +1,26 @@
+\ProvidesPackage{gglocal}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Writing a package basically consists of copying the contents of 
+% your document preamble into a separate file with a name 
+% ending in .sty.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\tnss}{The not so Short Introduction to \LaTeXe}
+
+\newcommand{\txsit}[1]{The \emph{#1} Short Introduction to \LaTeXe}
+
+\newenvironment{king}{\begin{quote}}{\end{quote}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% user-defined
+\newcounter{ggpagecounter}[section]
+\newcommand{\ggnewpage}[1] {
+  \stepcounter{ggpagecounter}
+  \ovalbox{\begin{minipage}{10cm}
+  \bf{\arabic{ggpagecounter} #1}
+  \end{minipage}}\newline
+  \newline
+}
+
+\newcommand*{\ggemph}[1]{\underline{\emph{#1}}}
+
+\newtheorem{theorem}{Theorem}
+

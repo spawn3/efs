@@ -1,0 +1,18 @@
+=Version 0.4.1=
+  * guard against bad nthtail
+
+=Version 0.4.0=
+  * mount_opts app var, e.g., "allow_other, default_permissions" 
+
+=Version 0.3.0=
+  * change application defaults.
+
+=Version 0.2.0=
+  * set inodes for directories.
+
+=Version 0.1.0=
+  * added erlang:nodes () info.
+  * added os:getenv () info.
+
+=Version 0.0.0=
+  * Initial version.

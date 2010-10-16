@@ -1,0 +1,44 @@
+\section{YFS}
+
+\subsection{Process and Communication}
+C/S Model, Task(Request/Reply)的stage，即pipeline. 
+
+network protocols
+
+各进程间的链接管理，主要建立在TCP链接管理之上，链接建立和撤销，对各种网络事件的处理
+链接状态的维护和变迁图，即状态机模型。
+
+数据流，或者说data path, data flow, or communication path. 
+
+hello请求区别于特定的请求，在于它是由网络层自己处理的，不需要应用层的callback
+目前有两类hello request: selfcheck and getinfo.
+
+为什么监听一个固定端口，只接受hello，然后连接到一个随机监听的端口。
+整个cluster中，只有一个节点如此处理，分配NID，别的节点的INFO信息，都由该节点存储，并提供查询接口.
+
+每一个server的client端，都提供两套接口：blocked and unblocked. 对blocked接口，在网络层收到响应后，会以信令的方式通知。
+\begin{verbatim}
+sem_timedwait
+sem_post
+\end{verbatim}
+
+ynet-based server architecture. for example: cds, mds, c60d
+
+\subsection{Naming}
+
+为了实现持久通信，消息必须具有某种不变性，消息的组成：消息头和消息体。消息头的意义
+比如目标地址标示NID具有全局唯一性和不变性
+
+\begin{verbatim}
+rpc_host2nid
+\end{verbatim}
+
+\subsection{Resource Management}
+Resource View.
+
+concurrency and synchronization
+
+replication and consistency
+
+
+

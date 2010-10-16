@@ -1,0 +1,61 @@
+=== PROBLEMS ===
+
+diskreport
+chkget
+chkload
+
+=== Tools ===
+
+> xref:d(".").
+> dialyzer --src -r .
+
+cprof
+
+> cprof:start().
+> anything.
+> cprof:pause().
+> cprof:analyse().
+
+eprof
+
+fprof
+
+> fprof:start().
+> c(bar).  
+> fprof:apply(bar, test, [1000]).  
+> fprof:profile().  
+> fprof:analyse({dest, "bar.analysis"}).  
+
+=== eunit
+
+-include_lib("eunit/include/eunit.hrl").
+
+=== Interfaces ===
+
+Shell
+HTTP
+FTP
+Fuse
+NFS
+CIFS
+
+=== API ===
+
+Erlang API
+C API
+
+=== Deployment ===
+
+Distributed Erlang
+Socket API
+
+> systools:make_script("efs-0.0.1").
+> systools:make_tar("efs-0.0.1", [{erts, "/usr/local/lib/erlang"}]).
+
+# cp efs-0.0.1.tar.gz /usr/local/lib/erlang/releases
+# cp efs-0.0.1.rel /usr/local/lib/erlang/releases
+
+> application:start(sasl).
+> release_handler:unpack_release("efs-0.0.1").
+
+# erl -config ./ebin/elog1 -pa ./ebin -boot /usr/local/lib/erlang/release/0.0.1/start

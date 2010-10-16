@@ -1,0 +1,163 @@
+\newpage
+\section{Introduction}
+你好,\TeX, \LaTeX, \LaTeXe
+
+这是一个很好的工具，要通过实践好好掌握。 learning by doing is the best
+method，通过实践来学习是最好的学习方法。\underline{先掌握基本的形式}，逐步的推衍成复杂的系统。
+
+http://www.emule.org.cn/server.met
+
+http://www.edonkey2000.com/server.met
+
+\emph{An effective executive} does not need to be a leader in the sense that
+the term is now most commonly used. Harry Truman did not have one ounce of
+charisma, for example, yet he was among the most effective chief executives in
+U.S. history. Similarly, some of the best business and nonprifit CEOs I've
+worked with over a 65-year consulting career were not stereotypical leaders.
+They were all over the map in terms of their personalities, attitudes, values,
+strengths, and weeknesses.  They ranged from extroverted to nearly reclusive,
+from easygoing to controlling, from generous to parsimonious.
+
+What made them all effective is that they followed the same eight practices:
+
+\begin{itemize}
+  \item They asked, ``What needs to be done?''
+  \item They asked, ``What is right for the enterprise?''
+  \item They developed action plans.
+  \item They took responsibility for decisions.
+  \item They took responsibility for communicating.
+  \item They were focused on opportunities rather than problems.
+  \item They ran productive meetings.
+  \item They thought and said ``we'' rather than ``I''.
+\end{itemize}
+
+\begin{enumerate}
+  \item They asked, ``What needs to be done?''
+  \item They asked, ``What is right for the enterprise?''
+  \item They developed action plans.
+  \item They took responsibility for decisions.
+  \item They took responsibility for communicating.
+  \item They were focused on opportunities rather than problems.
+  \item They ran productive meetings.
+  \item They thought and said ``we'' rather than ``I''.
+\end{enumerate}
+
+The first two practices gave them the knowledge they needed. The next
+four helped them convert this knowledge into effective action. The last
+two ensured that the whole organization felt responsible and accoutable.
+
+\newpage
+\section{Tables}
+
+The first Table is\\
+\begin{tabular}{r|l|c} 
+  \hline
+  position & club             & games\\[0.5ex] \hline
+  1        & amsville rockets & 33\\
+  2        & borden comets    & 33\\
+  3        & quincy giants    & 55\\
+  \hline
+\end{tabular}
+
+The second table is\\
+\begin{tabular}
+  {|r|l||c|rrr|c|c|} \hline
+  Position & Club              & Games & W  & T  & L & Goals & Points\\ \hline\hline
+  1        & Amesville Rockets & 33    & 19 & 13 & 1 & 66:31 & 51:15\\ \hline
+  2        & Amesville Rockets & 33    & 19 & 13 & 1 & 66:31 & 51:15\\ \hline
+  3        & Amesville Rockets & 33    & 19 & 13 & 1 & 66:31 & 51:15\\ \hline
+\end{tabular}
+
+\newpage
+\section{Boxes}
+\begin{theorem}
+  Every infinite set of bounded points possesses at least one maximum point.
+\end{theorem}
+
+\begin{alltt}
+Underlining \underline{typewriter} text is also possible.
+Note that dollar($) and percent (%) signs are treated \emph{literally}.
+\end{alltt}
+
+\begin{minipage}[t][\totalheight][t]{3cm}
+  This is a minipage of height of 2~cm with the text at the top.
+  \includegraphics[scale=0.1]{../images/mp/doing-6.mps}
+\end{minipage}\hrulefill
+\parbox[t][\totalheight][c]{3cm}{In this parbox, the text is centered on the same height.}\hrulefill
+\begin{minipage}[t][\totalheight][b]{3cm}
+  In this third paragraph box, the text is at the bottom\ggemph{minipage}.
+\end{minipage}
+
+\noindent
+baseline\rule{1cm}{0.01cm}\\
+baseline\rule{1cm}{0cm}\\*[5cm]
+baseline\rule{1cm}{0.1cm}\\
+baseline\rule{1cm}{1cm}\\
+
+\noindent 
+package fancybox.\marginpar{package fancybox}, there are some examples:\\
+\shadowbox{\parbox{12cm}{The width of the shadom is given by the length $\backslash$shadowsize, default 4pt.
+Multiline text must be placed in a minipage environment, the same as for $\backslash$fbox.}}
+
+\noindent 
+\doublebox{\parbox{12cm}{The width of the inner frame is 0.75$\backslash$fboxrule, that of the outer frame is 
+1.5$\backslash$fboxrule, and the spacing between the frames is 1.5$\backslash$fboxrule plus 0.5pt.}}
+
+\begin{flushright}
+2010年的第二天，去理发。
+\end{flushright}
+
+\subsection{Box}
+这里是Box的一些实例：
+\makebox[5cm]{some words} \par
+\framebox[5cm][r]{some words}
+
+首行若有缩进，是由段落缩进造成的\\
+\mbox{mbox test, LR盒子的一种，其它还有fbox, makebox, framebox}\\
+\fbox{fbox test, LR盒子的一种，其它还有fbox, makebox, framebox}\\
+\makebox{makebox test, LR盒子的一种，其它还有fbox, makebox, framebox}\\
+\framebox{framebox test, LR盒子的一种，其它还有fbox, makebox, framebox}\\
+
+首行若有缩进，是由段落缩进造成的\\
+\framebox[2\width][r]{两倍宽度}\\
+\fbox{没有支撑}\\ 
+\fbox{使用支撑\rule[-3mm]{0pt}{8mm}}\\ 
+
+首行若有缩进，是由段落缩进造成的\\
+\parbox{12cm}{在\TeX中一切都是盒子，单个字符是盒子，若干字符排成一行构成一个大一点的行盒子，
+若干行盒子堆叠成段落盒子和页盒子。}
+
+首行若有缩进，是由段落缩进造成的\\
+Left\hrulefill Right\\
+Left\hrulefill\\
+Left\dotfill Right\\
+Left\dotfill\\
+\begin{minipage}{12cm}{在\TeX中一切都是盒子，单个字符是盒子，若干字符排成一行构成一个大一点的行盒子，
+若干行盒子堆叠成段落盒子和页盒子。}
+\end{minipage}
+
+\newpage
+\section{Tools}
+下决心好好学习如下几类工具，写文档的用\LaTeX/MetaPost，代码编辑用Vim,Make,Git,GDB，学习的方法是慢慢积累，从简单到复杂，
+主要还是对核心概念的深入体会，贯通起来，在实际应用中不断完善。
+
+工具链
+
+先从MetaPost下手, 待用的熟练了，在细致的学习\LaTeX。难点在中文的支持，需要理解很多技术细节。 工具用熟了，就可以转入具体的文章謀篇布局的讲究了。
+
+\newpage
+\section{MetaPost}
+latex+dvipdfmx接受的图形格式为ps,eps, pdflatex接受的图形格式为png.首先通过MetaPost生成图形，然后插进来。
+
+生成图形的方式有多种
+
+includegraphics
+
+\LaTeX{} is a document preparation system for the \TeX{} typesetting program. 
+Few people write in plain \TeX{} anymore. The current version is \LaTeXe.
+
+\begin{align}
+  E &= mc^2\\
+  m &= \frac{m_0}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align}
+

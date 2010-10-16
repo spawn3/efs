@@ -1,0 +1,141 @@
+\documentclass[11pt]{article}
+\usepackage{CJK}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{fancybox}
+\usepackage{alltt}
+%\usepackage{indentfirst}
+
+% user-defined
+\newcounter{yypagecounter}[section]
+\newcommand{\yynewpage}[1] {
+\stepcounter{yypagecounter}
+\ovalbox{
+  \begin{minipage}{12cm}
+  \bf{\arabic{yypagecounter} #1}
+  \end{minipage}
+}\newline
+\newline
+}
+
+\newcommand{\shellcmd}[1] {
+\fbox{
+\begin{minipage}{12cm}
+\textcolor{black}{#1}
+\end{minipage}}
+\newline
+}
+
+\begin{CJK}{UTF8}{song}
+\title{YFS集群文件系统配置手册}
+\author{For yfs-1.9.4}
+\date{\today}
+\end{CJK}
+
+\begin{document}
+\begin{CJK}{UTF8}{song}
+
+\maketitle
+\tableofcontents 
+
+\newpage
+\section{系统需求}
+\begin{itemize}
+  \item 支持平台
+    \begin{itemize}
+      \item GNU/Linux是本产品开发和运行的平台，其它平台暂不予支持
+    \end{itemize}
+  \item 软件需求
+    \begin{itemize}
+      \item libc运行时库，更新到最新稳定版本。
+      \item ssh必须安装并且保证sshd一直运行，以便用YFS脚本管理远端守护进程。
+      \item Python2.4以上版本。
+      \item 如果需要开启web监控，还需要安装webpy。
+    \end{itemize}
+\end{itemize}
+
+\section{安装软件}
+\noindent 如果你的集群尚未安装所需软件，你得首先安装它们。
+
+\noindent 以Ubuntu Linux为例：\\
+\shellcmd{\$ sudo apt-get install openssh-server openssh-client}
+
+\noindent Centos linux:\\
+\shellcmd{\$ yum install openssh-server openssh-client}
+
+\section{运行集群准备工作}
+\subsection{安装}
+\noindent 创建/sysy/yfs目录，该目录是YFS集群文件系统所需的工作目录\\
+\shellcmd{\$ mkdir -p /sysy/yfs}
+
+\noindent 拷贝yfs.tar.gz到该目录下并解压\\
+\shellcmd{
+\$ cp yfs.tar.gz /sysy/yfs\\
+\$ cd /sysy/yfs\\
+\$ tar -zxvf yfs.tar.gz}
+
+\subsection{配置集群}
+
+\begin{itemize}
+  \item master.cfg里包含了mds,镜像mds,ftp,nfs服务器的ip或主机名配置,
+    按需求将相关主机名和ip地址填入对应的项，
+    集群在启动时会在对应的服务器上启动对应的服务。
+    下面是一个例子:\\
+\shadowbox{
+\begin{minipage}{10cm}
+\begin{verbatim}
+  # MDS服务器地址
+  host=192.168.1.1
+
+  # 镜像MDS服务器地址
+  [secondarymds]
+  host=192.168.1.2
+
+  # FTP服务器地址
+  [yftp]
+  host=192.168.1.3
+
+  # NFS服务器地址
+  [ynfs]
+  host=192.168.1.3
+\end{verbatim}
+\end{minipage}
+}
+
+  \item slaves.cfg里面包含了cds服务器所在的服务器ip或主机名，
+    其中number这个参数知道了在具体某一台服务器上将要启动的cds个数，
+    需要注意的是，\textcolor{red}{cds必须从1开始连续增长，
+    如cds1,cds2,cds3\ldots,而不能是cds1,cds2,cds4,cds7\ldots},
+    下面是一个例子:\\
+\shadowbox{
+\begin{minipage}{10cm}
+\begin{verbatim}
+  [cds1]
+  host=192.168.1.5
+  number=1
+  [cds2]
+  host=192.168.1.6
+  number=2
+  [cds3]
+  host=192.168.1.7
+  number=3
+\end{verbatim}
+\end{minipage}
+}
+\end{itemize}
+
+\section{部署YFS到集群所有服务器}
+
+\section{运行}
+\shellcmd{
+\$ /sysy/yfs/app/sbin/yfs-daemon.py -s yfs\dotfill启动yfs文件系统\\
+\$ /sysy/yfs/app/sbin/yfs-daemon.py -s all\dotfill启动yfs, yftp, ynfs}
+
+注意：单独启动YFTP或者YNFS不会启动YFS，如果你需要启动YNFS，则需要\\
+\shellcmd{
+\$ /sysy/yfs/app/sbin/yfs-daemon.py -s yfs\\
+\$ /sysy/yfs/app/sbin/yfs-daemon.py -s ynfs}
+
+\end{CJK}
+\end{document}

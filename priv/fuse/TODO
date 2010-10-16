@@ -1,0 +1,9 @@
+mnesia:system_info and mnesia:table_info
+
+monitor pids and clean up state table
+monitor ports and clean up state table
+  no erlang:monitor for ports, but could create a seperate process 
+  that links, traps exits, and then exits, and monitor that
+
+crazy idea: write mode, e.g.,
+      echo "128000" > /tmp/sux/processes/\<0.13.0\>/heap_size 
