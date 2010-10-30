@@ -38,6 +38,7 @@ FTP
 Fuse
 NFS
 CIFS
+iSCSI
 
 === API ===
 

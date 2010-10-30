@@ -1,0 +1,14 @@
+{application, efs,
+ [
+  {description, "Erlang Distributed File System"},
+  {vsn, "1"},
+  {registered, [efs_sup, efs, efs_mds]},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  sasl
+                 ]},
+  {mod, { efs_app, []}},
+  {start_phases, []},
+  {env, []}
+ ]}.
