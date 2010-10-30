@@ -9,65 +9,19 @@
         rr/0,
         ss/0
     ]).
--compile(export_all).
+%-compile(export_all).
 
--include_lib("eunit/include/eunit.hrl").
 -include_lib("stdlib/include/ms_transform.hrl").
+-include("efs_test.hrl").
 -include("libefs.hrl").
-
-%%--------------------------------------------------------------
-%% tests
-%%--------------------------------------------------------------
-
-efs_test_() -> 
-    [
-        fun() -> ww(10, 1024*1024) end,
-
-        fun() ->
-            A = array:new(),
-            A1 = array:set(10, 1, A),
-
-            ?assertEqual(array:is_fix(A), false),
-            ?assertEqual(array:size(A), 0),
-            ?assertEqual(array:is_fix(A1), false),
-            ?assertEqual(array:size(A1), 11),
-            ?assertEqual(array:get(9, A1), undefined),
-            ?assertEqual(array:get(10, A1), 1)
-        end,
-
-        ?_assertEqual(1, 1)
-    ].
 
 %%--------------------------------------------------------------
 %% Internal Functions
 %%--------------------------------------------------------------
-test_write(0, _, _, _) ->
-    ok;
-test_write(N, Efd, Offset, Bin) ->
-    ?LOG([N, Offset]),
-    Size = byte_size(Bin),
-    efs:pwrite(Efd, Offset, Size, Bin),
-    test_write(N-1, Efd, Offset+Size, Bin).
-
-get_bin(0, B) ->
-    B;
+get_bin(0, B) -> B;
 get_bin(N, B) ->
     B1 = <<B/binary, B/binary>>,
     get_bin(N-1, B1).
-
-test_write(Path) ->
-%    Bin = get_bin(1, <<"text">>),
-    Efd = efs:create(Path),
-    case Efd of
-        ?FD_ERR ->
-            ok;
-        _Other ->
-            test_write(11, Efd, 0, <<"text">>),
-            efs:show(),
-            efs:close(Efd),
-            efs:show(),
-            efs:stat(Path)
-    end.
 
 put_file(Efd, S, Off, Count) ->
     case file:pread(S, Off, Count) of
@@ -80,8 +34,7 @@ put_file(Efd, S, Off, Count) ->
             {error, eof}
     end.
 
-put_file1(_, _, 0) ->
-    ok;
+put_file1(_, _, 0) -> ok;
 put_file1(Efd, Off, Size) ->
     B = get_bin(14, <<"text">>), %% 512K
     Buflen = erlang:min(Size, byte_size(B)),
@@ -121,18 +74,8 @@ put_file(Path) ->
             {error, _Reason}
     end.
 
-get_file(Fd, Offset, Count, S) ->
-    case efs:pread(Fd, Offset, Count) of
-        {ok, Buf} ->
-            file:pwrite(S, Offset, Buf),
-            get_file(Fd, Offset+byte_size(Buf), Count, S);
-        {error, _Reason} ->
-            {error, _Reason}
-    end.
-
 get_file(Path) ->
     {ok, S} = file:open(Path, [write,binary]),
-
     case efs:open(Path) of 
         {ok, Efd} ->
             get_file(Efd, 0, ?RW_BUFLEN, S),
@@ -143,8 +86,16 @@ get_file(Path) ->
     file:close(S),
     ok.
 
-spawn_join(0) ->
-    ok;
+get_file(Fd, Offset, Count, S) ->
+    case efs:pread(Fd, Offset, Count) of
+        {ok, Buf} ->
+            file:pwrite(S, Offset, Buf),
+            get_file(Fd, Offset+byte_size(Buf), Count, S);
+        {error, _Reason} ->
+            {error, _Reason}
+    end.
+
+spawn_join(0) -> ok;
 spawn_join(N) ->
     receive
         _Any ->
@@ -182,3 +133,65 @@ ss() ->
 ss1(Path) ->
     ?LOG([Path, efs:stat(Path)]).
 
+%%--------------------------------------------------------------
+%% tests
+%%--------------------------------------------------------------
+test_write(0, _, _, _) -> ok;
+test_write(N, Efd, Offset, Bin) ->
+    ?LOG([N, Offset]),
+    Size = byte_size(Bin),
+    efs:pwrite(Efd, Offset, Size, Bin),
+    test_write(N-1, Efd, Offset+Size, Bin).
+
+test_write(Path) ->
+%    Bin = get_bin(1, <<"text">>),
+    Efd = efs:create(Path),
+    case Efd of
+        ?FD_ERR ->
+            ok;
+        _Other ->
+            test_write(11, Efd, 0, <<"text">>),
+            efs:show(),
+            efs:close(Efd),
+            efs:show(),
+            efs:stat(Path)
+    end.
+
+-ifdef(TEST).
+efs_test_() -> 
+    [
+        fun() ->
+            A = array:new(),
+            A1 = array:set(10, 1, A),
+
+            ?assertEqual(array:is_fix(A), false),
+            ?assertEqual(array:size(A), 0),
+            ?assertEqual(array:is_fix(A1), false),
+            ?assertEqual(array:size(A1), 11),
+            ?assertEqual(array:get(9, A1), undefined),
+            ?assertEqual(array:get(10, A1), 1)
+        end,
+
+        {"write and read",
+            setup,
+            fun() -> 
+                    application:start(sasl),
+                    application:start(efs),
+                    ww(10,1024*1024),
+                    timer:sleep(3000),
+                    ?debugMsg("rr"),
+                    rr(),
+                    ?debugMsg("rr step"),
+                    rr(10)
+            end,
+            fun(_) -> ok end,
+            [
+                ?_assert(1 =:= 1)
+            ]
+        },
+
+        fun() -> test_write("aa") end,
+
+        ?_assert(true)
+    ].
+-endif.

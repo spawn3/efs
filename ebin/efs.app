@@ -3,7 +3,7 @@
               {vsn,"1"},
               {registered,[efs_sup,efs,efs_mds]},
               {applications,[kernel,stdlib,sasl]},
-              {mod,{efs_app,[]}},
+              {mod,{efs_app,[mds,{cds,1,3},client]}},
               {start_phases,[]},
               {env,[]},
               {modules,[efs,efs_app,efs_cds,efs_cds_hb,efs_cds_model,efs_dbg,

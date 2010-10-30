@@ -8,7 +8,7 @@
                   stdlib,
                   sasl
                  ]},
-  {mod, { efs_app, []}},
+  {mod, { efs_app, [mds, {cds,1,3}, client]}},
   {start_phases, []},
   {env, []}
  ]}.

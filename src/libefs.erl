@@ -1,11 +1,22 @@
 -module(libefs).
 -export([
         id_to_list/1,
-        id_isvalid/1
+        is_id/1,
+        time/0,
+        unconsult/2,
+        pwrite/3,
+        pread/3,
+        sleep/1,
+        dump/2,
+        home_path/2,
+        vec_cal/2,
+        vec_limit/3,
+        vec_update/4
     ]).
 
--compile(export_all).
+%-compile(export_all).
 
+-include("efs_test.hrl").
 -include("libefs.hrl").
 
 %id_to_list(ID, Version) ->
@@ -21,7 +32,7 @@
 id_to_list({_, ID, Version}) ->
     integer_to_list(ID) ++ "_v" ++ integer_to_list(Version).
 
-id_isvalid({_, ID, Version}) ->
+is_id({_, ID, Version}) ->
     if 
         ID =:= 0 orelse Version =:= 0 ->
             false;
@@ -85,9 +96,9 @@ dump(File, Term) ->
 %% configure
 %%--------------------------------------------------------------
 home_path(cds, MetaNo) ->
-    "/home/gj/git/efsroot/cds/" ++ integer_to_list(MetaNo) ++ "/"; 
+    "/home/gj/mylove/git/efs/efsroot/cds/" ++ integer_to_list(MetaNo) ++ "/"; 
 home_path(mds, MetaNo) ->
-    "/home/gj/git/efsroot/mds/" ++ integer_to_list(MetaNo) ++ "/". 
+    "/home/gj/mylove/git/efs/efsroot/mds/" ++ integer_to_list(MetaNo) ++ "/". 
 
 %%--------------------------------------------------------------
 %% vector
@@ -117,3 +128,85 @@ vec_update(NewOff, NewLen, OldOff, OldLen) ->
     {ResOff, ResEnd - ResOff}.
 
 %%--------------------------------------------------------------
+-ifdef(TEST).
+simple_test() ->
+    ?assert(id_to_list({0, 0, 0}) =:= "0_v0"),
+    ?assert(id_to_list({0, 1, 2}) =:= "1_v2"),
+
+    ?assertEqual(is_id({0,0,0}), false),
+    ?assertEqual(is_id({0,0,1}), false),
+    ?assertEqual(is_id({0,1,0}), false),
+    ?assertEqual(is_id({0,1,1}), true),
+
+    false = is_id({0,0,0}),
+    false = is_id({0,0,1}),
+    false = is_id({0,1,0}),
+    true  = is_id({0,1,1}),
+
+    ?assert(home_path(cds, 1) =:= "/home/gj/mylove/git/efs/efsroot/cds/1/"),
+    ?assert(home_path(cds, 2) =:= "/home/gj/mylove/git/efs/efsroot/cds/2/"),
+    ?assert(home_path(mds, 1) =:= "/home/gj/mylove/git/efs/efsroot/mds/1/"),
+    ?assert(home_path(mds, 2) =:= "/home/gj/mylove/git/efs/efsroot/mds/2/"),
+
+    ?assert(vec_cal(5,4) =:= {1,1}),
+    ?assert(vec_cal(6,4) =:= {1,2}),
+
+    ?assert(vec_limit(5,1,8) =:= 1),
+    ?assert(vec_limit(5,10,8) =:= 3),
+    ?assert(vec_limit(8,10,8) =:= 0),
+
+    ok.
+
+generator_test_() -> [
+    % representing a test as data
+    fun() -> ?assert(1 =:= 1) end,
+
+    % using macros to write tests
+    ?_test(?assert(id_to_list({0, 0, 0}) =:= "0_v0")),
+    ?_test(?assert(id_to_list({0, 1, 2}) =:= "1_v2")),
+
+    % underscore-prefixed macros create test objects
+    ?_assert(id_to_list({0, 0, 0}) =:= "0_v0"),
+    ?_assert(id_to_list({0, 1, 2}) =:= "1_v2"),
+
+    % test set with title
+    {"vec test", [
+        ?_assert(vec_cal(5,4) =:= {1,1}),
+        ?_assert(vec_cal(6,4) =:= {1,2}),
+
+        ?_assert(vec_limit(5,1,8) =:= 1),
+        ?_assert(vec_limit(5,10,8) =:= 3),
+        ?_assert(vec_limit(8,10,8) =:= 0)
+    ]},
+
+    ?_assertNot(false),
+    ?_assertEqual(false, false),
+
+    ?_assertException(throw, {not_found, _}, throw({not_found, 42})),
+    ?_assertThrow({not_found, _}, throw({not_found, 42})),
+    ?_assertError(badarith, 1/0),
+    ?_assertExit(normal, exit(normal)),
+
+    ?_assertCmd("ls"),
+    ?_assertCmdStatus(0, "ls"),
+    ?_cmd("ls"),
+
+    % test fixture
+    {"file setup and cleanup", 
+        setup,
+        fun() -> ?cmd("mktemp tmp.XXXXXXXX") end,
+        fun(File) -> 
+                %% debug macros
+                ?debugMsg(File),
+                ?cmd("rm " ++ File) 
+        end,
+        fun(File) -> [
+                ?_assertCmd("echo xyzzy >" ++ File),
+                ?_assertCmdOutput("xyzzy\n", "cat " ++ File)
+             ]
+        end
+    },
+
+    ?_assert(1 =:= 1)
+    ].
+-endif.

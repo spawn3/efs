@@ -214,7 +214,7 @@ handle_call(#mdp_open_req{path=Path} = _Msg, _From, STT)->
 %% chk operations
 handle_call(#mdp_chkget_req{chkid=ChkID, chkrep=ChkRep} = _Msg, _From, STT) ->
     ?INFOMSG(_Msg),
-    NewChkID = case libefs:id_isvalid(ChkID) of
+    NewChkID = case libefs:is_id(ChkID) of
         false -> #chkid{id=STT#stt.chkid, version=STT#stt.version};
         true  -> ChkID
     end,
@@ -232,7 +232,7 @@ handle_call(#mdp_chkload_req{chkid=ChkID} = _Msg, _From, STT) ->
 %% CDS
 handle_call(#mdp_diskjoin_req{name=Name, diskid=DiskID, diskstat=DiskStat} = _Msg, _From, STT) ->
     ?INFOMSG(_Msg),
-    case libefs:id_isvalid(DiskID) of
+    case libefs:is_id(DiskID) of
         false ->
             NewDiskID = #diskid{id=STT#stt.diskid, version=STT#stt.version},
             NewSTT = STT#stt{diskid=STT#stt.diskid+1};

@@ -3,7 +3,7 @@
 -export([start/0, start_link/1, init/1]).
 -export([get_list_from_env/0, get_list/2]).
 
--include_lib("eunit/include/eunit.hrl").
+-include("efs_test.hrl").
 -include("libefs.hrl").
 
 start_link(_Args) ->
@@ -12,7 +12,6 @@ start_link(_Args) ->
 start() ->
     spawn(fun() -> supervisor:start_link({local,?MODULE}, ?MODULE, []) end).
 
-%% callbacks
 init(_Args) ->
     %% Install my personal error handler
     %% gen_event:swap_handler(alarm_handler, {alarm_handler, swap}, {my_alarm_handler, xyz}),
@@ -47,8 +46,7 @@ get_list_from_env() ->
     end.
 
 
-get_list([], Acc) ->
-    Acc;
+get_list([], Acc) -> Acc;
 get_list([H|T], Acc) ->
     Acc1 = case H of
         mds ->
@@ -68,5 +66,3 @@ get_childspec(mds, MetaNo) ->
 get_childspec(cds, MetaNo) ->
     Tag = list_to_atom(atom_to_list(tag_cds) ++ "_" ++ integer_to_list(MetaNo)),
     {Tag, {efs_cds, start_link, [MetaNo]}, permanent, 10000, worker, [efs_cds]}.
-
-

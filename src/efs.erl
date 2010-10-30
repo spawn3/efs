@@ -8,7 +8,7 @@
         code_change/3]).
 -compile(export_all).
 
--include_lib("eunit/include/eunit.hrl").
+-include("efs_test.hrl").
 -include("libefs.hrl").
 -include("efs.hrl").
 
@@ -228,7 +228,7 @@ fmeta_chklist_resize(A, NewSize) ->
 -spec chkload1(#chkid{}, integer(), term()) -> {#chkid{}, list(), term()}.
 
 chkload1(ChkID, ChkNo, CL) ->
-    %    ?assert(libefs:id_isvalid(ChkID)),
+    %    ?assert(libefs:is_id(ChkID)),
 
     case array:get(ChkNo, CL) of
         undefined ->
@@ -243,7 +243,6 @@ chkload1(ChkID, ChkNo, CL) ->
             end,
             CL1 = array:set(ChkNo, Chk#efs_chk{loaded=true, disks=Dlist}, CL)
     end,
-    ?assertEqual(_NewChkID, ChkID),
     {ChkID, Dlist, CL1}.
 
 -spec chkload(integer(), integer()) -> 
@@ -280,7 +279,7 @@ chkget(Fd, Offset) ->
             end,
 
             #md_chk{chkid=ChkID} = array:get(ChkNo, MDCL),
-            case libefs:id_isvalid(ChkID) of
+            case libefs:is_id(ChkID) of
                 false ->
                     {NewChkID, Dlist} = efs_mds:chkget(ChkID, ChkNo, ?CHK_REP), 
                     CL1 = array:set(ChkNo, #efs_chk{loaded=true, disks=Dlist}, CL);
@@ -291,8 +290,6 @@ chkget(Fd, Offset) ->
             MDCL1 = array:set(ChkNo, #md_chk{chkid=NewChkID}, MDCL),
             Fmeta1 = Fmeta#md_file{chklist=MDCL1},
             ets:insert(efs_fdtable, {Fd, Efile#efs_file{fmeta=Fmeta1, chklist=CL1}}),
-
-            ?assertEqual(?CHK_REP, length(Dlist)),
 
             {ok, FID, NewChkID, Fmeta1#md_file.chklen, Dlist};
         [_Other] ->
