@@ -1,9 +1,20 @@
+%% @author gj <happydgj@gmail.com>
+%% @doc The shell of EFS.
+%% @reference <a href="http://www.erlang.org">Erlang World</a>
+%% @copyright 2010
+%%
+%% @todo add C API
+%% @todo add Python API
+%% @todo add NFS support
+
 -module(efs_shell).
 -export([
         get_bin/2,
         put_file/1,
         put_file/2,
         get_file/1,
+        test_write/1,
+        test_write/4,
         ww/2,
         rr/1,
         rr/0,
@@ -103,6 +114,9 @@ spawn_join(N) ->
             spawn_join(N-1)
     end.
 
+%% @doc write N files to EFS and each file size is Size bytes.
+%% @spec ww(integer(), integer()) -> any()
+
 ww(N, Size) ->
     process_flag(trap_exit, true),
     lists:foreach(fun(I) -> spawn_link(?MODULE, put_file, [I, Size]) end, lists:seq(1, N)),
@@ -112,8 +126,7 @@ rr() ->
     {ok, Files} = efs:readdir("/"),
     lists:foreach(fun get_file/1, Files).
 
-traverse_multi1(_L, I, N, _Step) when I > N ->
-    ok;
+traverse_multi1(_L, I, N, _Step) when I > N -> ok;
 traverse_multi1(L, I, N, Step) ->
     L1 = lists:sublist(L, I, Step),
     process_flag(trap_exit, true),
@@ -190,8 +203,24 @@ efs_test_() ->
             ]
         },
 
-        fun() -> test_write("aa") end,
+%        fun() -> test_write("aa") end,
 
         ?_assert(true)
     ].
+
+lazy_test_() ->
+    {spawn, [
+            ?_test(undefined = put(count, 0)), 
+            lazy_gen(7), 
+            ?_assertMatch(7, get(count))]}.
+
+lazy_gen(N) ->
+    {generator,
+        fun () ->
+                if N > 0 ->
+                        [?_test(put(count,1+get(count))) | lazy_gen(N-1)];
+                    true -> []
+                end
+        end}.
+
 -endif.

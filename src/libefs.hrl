@@ -13,11 +13,7 @@
 -define(DISK_HB_INTERVAL, 1000).
 
 -type chkop() :: 'add' | 'del'.
-
-%% @type filename() = string().
 -type filename() :: string().
-
-%% @type cdsname() = {atom(), node()}. CDS Node Specification.
 -type cdsname() :: {atom(), node()}.
 
 %%--------------------------------------------------------------
@@ -232,8 +228,6 @@
         chkid = #chkid{}      :: #chkid{}
     }).
 
-%-define(debug, true).
-
 -ifdef(debug).
 -define(INFOMSG(X), error_logger:info_msg("{~p,~p}: ~p~n", [?MODULE, ?LINE, X])).
 -else.
@@ -243,5 +237,5 @@
 -ifdef(debug).
 -define(LOG(X), io:format("{~p,~p}: ~p~n", [?MODULE,?LINE,X])).
 -else.
--define(LOG(X), true).
+-define(LOG(X), begin case X of _ -> true end end).
 -endif.

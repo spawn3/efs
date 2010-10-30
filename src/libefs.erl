@@ -130,30 +130,30 @@ vec_update(NewOff, NewLen, OldOff, OldLen) ->
 %%--------------------------------------------------------------
 -ifdef(TEST).
 simple_test() ->
-    ?assert(id_to_list({0, 0, 0}) =:= "0_v0"),
-    ?assert(id_to_list({0, 1, 2}) =:= "1_v2"),
+    ?assert(libefs:id_to_list({0, 0, 0}) =:= "0_v0"),
+    ?assert(libefs:id_to_list({0, 1, 2}) =:= "1_v2"),
 
-    ?assertEqual(is_id({0,0,0}), false),
-    ?assertEqual(is_id({0,0,1}), false),
-    ?assertEqual(is_id({0,1,0}), false),
-    ?assertEqual(is_id({0,1,1}), true),
+    ?assertEqual(libefs:is_id({0,0,0}), false),
+    ?assertEqual(libefs:is_id({0,0,1}), false),
+    ?assertEqual(libefs:is_id({0,1,0}), false),
+    ?assertEqual(libefs:is_id({0,1,1}), true),
 
-    false = is_id({0,0,0}),
-    false = is_id({0,0,1}),
-    false = is_id({0,1,0}),
-    true  = is_id({0,1,1}),
+    false = libefs:is_id({0,0,0}),
+    false = libefs:is_id({0,0,1}),
+    false = libefs:is_id({0,1,0}),
+    true  = libefs:is_id({0,1,1}),
 
-    ?assert(home_path(cds, 1) =:= "/home/gj/mylove/git/efs/efsroot/cds/1/"),
-    ?assert(home_path(cds, 2) =:= "/home/gj/mylove/git/efs/efsroot/cds/2/"),
-    ?assert(home_path(mds, 1) =:= "/home/gj/mylove/git/efs/efsroot/mds/1/"),
-    ?assert(home_path(mds, 2) =:= "/home/gj/mylove/git/efs/efsroot/mds/2/"),
+    ?assert(libefs:home_path(cds, 1) =:= "/home/gj/mylove/git/efs/efsroot/cds/1/"),
+    ?assert(libefs:home_path(cds, 2) =:= "/home/gj/mylove/git/efs/efsroot/cds/2/"),
+    ?assert(libefs:home_path(mds, 1) =:= "/home/gj/mylove/git/efs/efsroot/mds/1/"),
+    ?assert(libefs:home_path(mds, 2) =:= "/home/gj/mylove/git/efs/efsroot/mds/2/"),
 
-    ?assert(vec_cal(5,4) =:= {1,1}),
-    ?assert(vec_cal(6,4) =:= {1,2}),
+    ?assert(libefs:vec_cal(5,4) =:= {1,1}),
+    ?assert(libefs:vec_cal(6,4) =:= {1,2}),
 
-    ?assert(vec_limit(5,1,8) =:= 1),
-    ?assert(vec_limit(5,10,8) =:= 3),
-    ?assert(vec_limit(8,10,8) =:= 0),
+    ?assert(libefs:vec_limit(5,1,8) =:= 1),
+    ?assert(libefs:vec_limit(5,10,8) =:= 3),
+    ?assert(libefs:vec_limit(8,10,8) =:= 0),
 
     ok.
 
@@ -162,21 +162,21 @@ generator_test_() -> [
     fun() -> ?assert(1 =:= 1) end,
 
     % using macros to write tests
-    ?_test(?assert(id_to_list({0, 0, 0}) =:= "0_v0")),
-    ?_test(?assert(id_to_list({0, 1, 2}) =:= "1_v2")),
+    ?_test(?assert(libefs:id_to_list({0, 0, 0}) =:= "0_v0")),
+    ?_test(?assert(libefs:id_to_list({0, 1, 2}) =:= "1_v2")),
 
     % underscore-prefixed macros create test objects
-    ?_assert(id_to_list({0, 0, 0}) =:= "0_v0"),
-    ?_assert(id_to_list({0, 1, 2}) =:= "1_v2"),
+    ?_assert(libefs:id_to_list({0, 0, 0}) =:= "0_v0"),
+    ?_assert(libefs:id_to_list({0, 1, 2}) =:= "1_v2"),
 
     % test set with title
     {"vec test", [
-        ?_assert(vec_cal(5,4) =:= {1,1}),
-        ?_assert(vec_cal(6,4) =:= {1,2}),
+        ?_assert(libefs:vec_cal(5,4) =:= {1,1}),
+        ?_assert(libefs:vec_cal(6,4) =:= {1,2}),
 
-        ?_assert(vec_limit(5,1,8) =:= 1),
-        ?_assert(vec_limit(5,10,8) =:= 3),
-        ?_assert(vec_limit(8,10,8) =:= 0)
+        ?_assert(libefs:vec_limit(5,1,8) =:= 1),
+        ?_assert(libefs:vec_limit(5,10,8) =:= 3),
+        ?_assert(libefs:vec_limit(8,10,8) =:= 0)
     ]},
 
     ?_assertNot(false),

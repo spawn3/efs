@@ -16,7 +16,7 @@
     ]).
 -compile(export_all).
 
--include_lib("eunit/include/eunit.hrl").
+-include("efs_test.hrl").
 -include("libefs.hrl").
 -include("efs_mds.hrl").
 
